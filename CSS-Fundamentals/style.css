@@ -1,0 +1,363 @@
+/* 
+  universal selector
+  虽然冲突优先级低
+  但能应用于所有元素 且 不涉及继承
+*/
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* element selectors*/
+body {
+  color: #444;
+  font-family: sans-serif;
+  border-top: 10px solid #1098ad;
+  position: relative;
+}
+
+.container {
+  width: 700px;
+  /* margin-left: auto;
+  margin-right: auto; */
+  margin: 0 auto;
+}
+
+.main-header {
+  background-color: #f7f7f7;
+  /* 
+  padding-left: 40px;
+  padding-right: 40px; 
+*/
+  padding: 20px 40px;
+  margin-bottom: 60px;
+
+  /* 此处的height是content的而非element的(结合css box model)*/
+  height: 80px;
+}
+
+nav {
+  font-size: 18px;
+}
+
+article {
+  margin-bottom: 60px;
+}
+
+.post-header {
+  margin-bottom: 40px;
+  /* position: relative; */
+}
+
+/*
+  combined selector / selector list
+*/
+h1,
+h2,
+h3,
+h4 {
+  color: #1098ad;
+}
+
+/*
+  element selector
+*/
+h1 {
+  font-size: 26px;
+  text-transform: uppercase;
+  font-style: italic;
+}
+
+h2 {
+  font-size: 30px;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+h3 {
+  font-size: 30px;
+  margin-bottom: 20px;
+
+  /* 
+    margin collapsing
+    此h3元素的top margin为40px，上方与其相邻的p元素的bottom margin为15px
+    但这两元素的间距并非 40+15=55px，而是40px(取大值)，即margin collapsing
+  */
+  margin-top: 40px;
+}
+
+h4 {
+  font-size: 20px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+p {
+  font-size: 22px;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+ul,
+ol {
+  margin-left: 50px;
+  margin-bottom: 20px;
+}
+
+/*
+  descendent selector后置选择器、嵌套后置选择器 不用
+  footer p {
+  font-size: 16px;
+  }
+
+  article header p {
+  font-style: italic;
+  }
+*/
+
+/*id selector 不用*/
+#author {
+  font-style: italic;
+  font-size: 18px;
+}
+
+#copyright {
+  font-size: 16px;
+}
+
+/*class selector 推荐！*/
+.related-author {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.author-pic {
+  list-style: none;
+}
+
+aside {
+  background-color: #f7f7f7;
+  border-top: 10px solid #1098ad;
+  border-bottom: 10px solid #1098ad;
+  /* padding-top: 50px;
+  padding-bottom: 50px; */
+  padding: 50px 0;
+  width: 500px;
+}
+
+/* .first-li {
+  font-weight: bold;
+} */
+
+li {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+li:first-child {
+  font-weight: bold;
+}
+
+li:last-child {
+  font-style: italic;
+  margin-bottom: 0;
+}
+
+li:nth-child(2) {
+  color: red;
+}
+
+li:nth-child(odd) {
+  color: blue;
+}
+
+/* p元素与article元素必须是直接关系，否则first-child不会生效
+   该例中article与p中间还有一个header 
+*/
+article p:first-child {
+  color: red;
+}
+
+/* use pesudo class to style links: 
+   LVHA必须都要指定，推荐使用伪类选择器(.xxx:xxx)的组合 link、visited一组 hover、active一组 
+*/
+/* a {
+  color: red;
+} */
+
+a:link {
+  color: #1098ad;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #1098ad;
+}
+
+a:hover {
+  color: orangered;
+  font-weight: bold;
+  text-decoration: underline dotted orangered;
+}
+
+a:active {
+  background-color: grey;
+  font-style: italic;
+}
+
+nav a:link {
+  /* margin: 20px;
+  padding: 20px;
+  display: block; */
+  margin-right: 10px;
+  margin-top: 10px;
+  display: inline-block;
+}
+
+nav a:link:last-child {
+  margin-right: 0;
+}
+
+.post-img {
+  /* 此自适应百分比的基础是父容器，即该img元素的父元素header尺寸的100%*/
+  width: 100%;
+  height: auto;
+}
+
+button {
+  font-size: 22px;
+  padding: 10px;
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
+  cursor: pointer;
+}
+
+/*
+  pseudo element(::)
+*/
+h1::first-letter {
+  font-style: normal;
+  margin-right: 10px;
+}
+
+/*
+  adjacent sibling selector(+)
+*/
+h3 + P::first-line {
+  color: #c3ea50;
+}
+
+/*
+  after pseudo element: last child of the selected element(h2)
+  before pseudo element: first child of the selected element(h2)
+
+  使用positions属性定位后，before和after观感上区别不大
+
+  essentially is a inline box / element
+*/
+h2::after {
+  content: "TOP";
+  background-color: yellow;
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+  display: inline-block;
+  padding: 5px 10px;
+  position: absolute;
+  top: -10px;
+  right: -25px;
+}
+
+/*
+  所有选择器都会被应用
+  但出现冲突属性时的优先级为：
+  decalration marked !important           >
+  inline style(style attribute in HTML)   >
+  ID(#) selector                          >
+  class(.)  or pseudo(:) selector         >
+  element selector                        >
+  universal(*) selector
+  
+  同时，#、.、:、element 这4种selector重复出现时
+  写在最后的selector会被应用
+*/
+
+/*
+  Resolving conflicts
+  Best practice: do not use # or multiple .
+
+  #copyright {
+  color: red;
+}
+
+.copyright {
+  color: yellow;
+}
+.text {
+  color: green;
+}
+
+footer p {
+  color: blue  !important;
+}
+
+/* 
+  Inheritance
+
+  子继承父（body元素是最常见的父元素）
+  不是所有属性都会被继承
+  主要被继承的是与文字相关的
+
+  优先级低
+  当父与子出现冲突时，子内声明的属性值会将父的覆盖
+*/
+
+/*
+  css box medel
+  1. inline element(em, strong, a, img, button...)
+    occupy the space necessary of its content
+    causes no line breaks after or before the element
+    heights and widths do not apply to them
+    paddings and margins applied only horizontally(left and right)
+
+  2. block-level element(p, h1...)
+    oppucy 100% of parent element's width, no matter the content
+    stacked vertically by default, one after another
+    create line breaks after them / can't be side by side with one another
+  
+    display属性可以让两者相互转化:
+      display: block
+      display: inline
+
+  3. inline-block box
+    looks like inline from outside, behaves like block-level from inside
+    occupies only content's space
+    causes no line breaks
+    css box model applies normally
+    
+    如何创建？
+    display:inline-block
+*/
+
+/*
+  1. Normal Flow 
+    default positioning
+    element is "in flow"
+    elements are laid out according to their order on the html code
+
+    默认属性设置
+    position: relative
+
+  2. Absolute Positioning
+    element is removed from the normal flow:"out of flow"
+    no impact on surrounding elements, might overlap them
+    use top, bottom, left,right to offset the element from its relatively container
+
+    属性设置
+    position: absolute
+
+    相对属性所在的元素一定是绝对属性所在元素的父元素
+    两属性都要设置
+
+*/
